@@ -24,11 +24,18 @@
         <!-- 楼层图片区域 -->
         <view class="floor-img-box">
           <!-- 左侧大图片的盒子 -->
-          <view class="left-img-box"><image class="left-img" :src="item.product_list[0].image_src" :style="{ width: item.product_list[0].image_width + 'rpx' }"></image></view>
+          <view class="left-img-box">
+            <image
+              @click="goGoodslist(item.product_list[0].navigator_url)"
+              class="left-img"
+              :src="item.product_list[0].image_src"
+              :style="{ width: item.product_list[0].image_width + 'rpx' }"
+            ></image>
+          </view>
           <!-- 右侧 4 个小图片的盒子 -->
           <view class="right-img-box">
             <view class="right-img-item" v-for="(item2, i2) in item.product_list" :key="i2" v-if="i2 !== 0">
-              <image :src="item2.image_src" mode="widthFix" :style="{ width: item2.image_width + 'rpx' }"></image>
+              <image @click="goGoodslist(item2.navigator_url)" :src="item2.image_src" mode="widthFix" :style="{ width: item2.image_width + 'rpx' }"></image>
             </view>
           </view>
         </view>
@@ -59,7 +66,6 @@ export default {
       this.navList = res;
     },
     // 获取楼层数据
-
     async loadfloors() {
       const res = await getfloorsApi();
       this.floors = res;
@@ -77,8 +83,15 @@ export default {
           url: '/pages/cate/cate'
         });
       }
+    },
+    //跳转到商品列表
+    goGoodslist(url) {
+      uni.navigateTo({
+        url: '/subpkg/goods_list/goods_list?' + url.split('?')[1]
+      });
     }
   },
+
   onLoad() {
     this.loadBanner();
     this.getNavsList();
